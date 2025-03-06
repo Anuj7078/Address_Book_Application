@@ -1,6 +1,5 @@
 package com.example.address_book_application.controller;
 
-// UC5 Completed and Assignment done
 import com.example.address_book_application.dto.UserDTO;
 import com.example.address_book_application.model.User;
 import com.example.address_book_application.service.UserService;
@@ -33,6 +32,12 @@ public class UserController {
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(userService.createUser(userDTO));
+    }
+
+    // POST create multiple users
+    @PostMapping("/bulk")
+    public ResponseEntity<List<User>> createUsers(@RequestBody List<UserDTO> userDTOList) {
+        return ResponseEntity.ok(userService.saveAllUsers(userDTOList));
     }
 
     // PUT update user by ID
