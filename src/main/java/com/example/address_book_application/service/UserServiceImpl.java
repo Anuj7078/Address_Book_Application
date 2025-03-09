@@ -4,6 +4,7 @@ import com.example.address_book_application.dto.UserDTO;
 import com.example.address_book_application.model.User;
 import com.example.address_book_application.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<User> getAllUsers() {
@@ -32,6 +36,8 @@ public class UserServiceImpl implements UserService {
         user.setAddress(userDTO.getAddress());
         user.setPincode(userDTO.getPincode());
         user.setPermanentAddress(userDTO.isPermanentAddress());
+        user.setUsername(userDTO.getUsername()); // Set username
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword())); // Encode password
         return userRepository.save(user);
     }
 
@@ -42,6 +48,8 @@ public class UserServiceImpl implements UserService {
         user.setAddress(userDTO.getAddress());
         user.setPincode(userDTO.getPincode());
         user.setPermanentAddress(userDTO.isPermanentAddress());
+        user.setUsername(userDTO.getUsername()); // Update username
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword())); // Update password
         return userRepository.save(user);
     }
 
@@ -52,7 +60,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> saveAllUsers(List<UserDTO> userDTOList) {
-        // Convert UserDTO list to User list
         List<User> users = userDTOList.stream()
                 .map(dto -> {
                     User user = new User();
@@ -60,11 +67,12 @@ public class UserServiceImpl implements UserService {
                     user.setAddress(dto.getAddress());
                     user.setPincode(dto.getPincode());
                     user.setPermanentAddress(dto.isPermanentAddress());
+                    user.setUsername(dto.getUsername()); // Set username
+                    user.setPassword(passwordEncoder.encode(dto.getPassword())); // Encode password
                     return user;
                 })
                 .collect(Collectors.toList());
 
-        // Save all users to the database
         return userRepository.saveAll(users);
     }
 }

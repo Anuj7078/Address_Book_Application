@@ -16,4 +16,6 @@ public class User {
     private String address;
     private int pincode;
     private boolean isPermanentAddress;
+    private String username; // Add username field
+    private String password; // Add password field
 }
